@@ -14,7 +14,7 @@ describe "Static pages" do
   		visit root_path
   		# let(:heading) {'Sign up'}
   		click_link "Sign up now!"
-  		should have_selector('h1', text: 'Sign up now!')
+  		should have_selector('h1', text: 'Sign up')
   		# it_should_behave_like "all_static_pages"
 	end
 	

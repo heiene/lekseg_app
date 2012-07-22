@@ -2,15 +2,13 @@
 #
 # Table name: users
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime        not null
-#  updated_at :datetime        not null
-#
-#
-#  Før man kan kjøre tester i test database må man sørge for å reflektere development db i test:
-#  "bundle exec rake db:test:prepare"
+#  id              :integer         not null, primary key
+#  name            :string(255)
+#  email           :string(255)
+#  created_at      :datetime        not null
+#  updated_at      :datetime        not null
+#  password_digest :string(255)
+#  remember_token  :string(255)
 #
 
 
@@ -36,7 +34,9 @@ describe User do
 
   it { should respond_to(:name) }
   it { should respond_to(:email) }
-
+  it { should respond_to(:remember_token) }
+    
+  
   # for å få denn under til å passe må man vist: 
 
   # rails generate migration add_password_digest_to_users password_digest:string
@@ -57,6 +57,12 @@ describe User do
   # bare sjekker at user name er valid
   it { should be_valid }
 
+  describe "remember token" do
+    before { @user.save }
+
+    its(:remember_token) { should_not be_blank }
+
+  end
   # her sjekker man at user name ikke kan være tomt
   describe "when missing name" do
   	before { @user.name = " " }
@@ -104,6 +110,20 @@ describe User do
 
     it { should_not be_valid }
   end
+
+  describe "when email is mixed case" do
+  	
+  	let(:test_email) { 'FooBAR@ExamPLe.com' }
+
+  	it "should be saved as lowercase"  do
+			@user.email = test_email
+			@user.save
+			@user.reload.email.should == test_email.downcase
+		
+		end
+	end
+
+
 
  	#Password
  	describe "when password is not present" do
