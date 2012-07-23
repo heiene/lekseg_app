@@ -35,7 +35,8 @@ describe User do
   it { should respond_to(:name) }
   it { should respond_to(:email) }
   it { should respond_to(:remember_token) }
-    
+  it { should respond_to(:admin) }
+  
   
   # for å få denn under til å passe må man vist: 
 
@@ -56,6 +57,13 @@ describe User do
 
   # bare sjekker at user name er valid
   it { should be_valid }
+  it { should_not be_admin }
+
+  describe "with admin attribute set to 'true'" do
+    before { @user.toggle!(:admin) }
+
+    it { should be_admin }
+  end
 
   describe "remember token" do
     before { @user.save }
